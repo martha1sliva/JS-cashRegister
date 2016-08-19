@@ -1,0 +1,65 @@
+// create staff with name and discount percent
+function StaffMember(name,discountPercent){
+    this.name = name;
+    this.discountPercent = discountPercent;
+}
+
+// creation of staff
+var sally = new StaffMember("Sally",5);
+var bob = new StaffMember("Bob",10);
+var me = new StaffMember("Me", 20);
+
+// creating object Cash Register
+var cashRegister = {
+    //set total and last transaction to 0
+    total:0,
+    lastTransactionAmount: 0,
+    
+    // add items to the total
+    add: function(itemCost){
+        this.total += (itemCost || 0);
+        // update lastTransactionAmount
+        this.lastTransactionAmount = itemCost;
+    },
+    
+    // scanning function to check item and multiply by quantity
+    scan: function(item,quantity){
+        switch (item){
+        case "eggs": this.add(0.98 * quantity); break;
+        case "milk": this.add(1.23 * quantity); break;
+        case "magazine": this.add(4.99 * quantity); break;
+        case "chocolate": this.add(0.45 * quantity); break;
+        }
+        return true;
+    },
+    
+    // voids last transaction from total
+    voidLastTransaction : function(){
+        this.total -= this.lastTransactionAmount;
+        // reset lastTransactionAmount to 0
+        this.lastTransactionAmount = 0;
+    },
+    
+    // applyStaffDiscount here
+    applyStaffDiscount: function(employee){
+        this.total = this.total*(1-(employee.discountPercent/100))
+    }
+    
+};
+
+
+cashRegister.scan('eggs',1);
+cashRegister.scan('milk',1);
+cashRegister.scan('magazine',3);
+cashRegister.scan('chocolate',4);
+
+//Void the last transaction and add 3 instead
+cashRegister.voidLastTransaction();
+cashRegister.scan('chocolate',3);
+
+// Apply your staff discount by passing the 'me' object 
+// to applyStaffDiscount
+cashRegister.applyStaffDiscount(me);
+
+// Show the total bill, rounded to two decimals
+console.log('Your bill is '+ cashRegister.total.toFixed(2));
